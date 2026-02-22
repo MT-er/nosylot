@@ -1,60 +1,32 @@
-# Nosylot
+# 🦎 Nosylot
 
-A minimal web app that lets you ask questions about a webpage or pasted text. Enter a URL or paste content, ask a question, and get an AI-powered answer.
+Nosylot is a lightweight AI reading companion that helps users quickly understand web content without manually reading long articles. Simply enter a URL or paste text, ask a question, and Nosylot will analyze the content using AI.
 
-## Features
+## ✨ Features
 
-- **URL or text** — Choose to analyze a webpage (fetches and extracts visible text) or paste raw text
-- **AI answers** — Uses the [Featherless](https://featherless.ai) API to answer your question based on the content
-- **Light/dark mode** — Toggle with a button in the top-right; preference is saved
-- **Simple UI** — Single page, no clutter
+- 🌐 Analyze webpages or pasted text
+- 🤖 AI-powered question answering using Featherless inference models
+- 🌓 Light/Dark theme toggle with saved preference
+- ⚡ Simple, fast, and minimal UI
 
-## Prerequisites
+## 🎯 Purpose
 
-- Python 3.8+
-- A [Featherless](https://featherless.ai) API key
+Designed to help students and learners quickly extract knowledge from long articles and web pages.
 
-## Setup
+## ⚠️ Limitations
 
-1. **Clone the repo**
-   ```bash
-   git clone https://github.com/your-username/nosylot.git
-   cd nosylot
-   ```
+- Some websites may block scraping due to anti-bot protection  
+- Very large pages are truncated for performance and cost efficiency  
 
-2. **Create a virtual environment (recommended)**
-   ```bash
-   python -m venv venv
-   source venv/bin/activate   # Windows: venv\Scripts\activate
-   ```
+## 🛠 Tech Stack
 
-3. **Install dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
+- **Backend:** Flask, Requests, BeautifulSoup, python-dotenv  
+- **Frontend:** HTML, CSS, JavaScript  
+- **AI:** Featherless API  
 
-4. **Configure your API key**
-   - Copy `.env` or create it in the project root
-   - Set your Featherless API key:
-     ```
-     FEATHERLESS_API_KEY=your_key_here
-     ```
-   - Get a key at [featherless.ai/account/api-keys](https://featherless.ai/account/api-keys)
+## 📦 Setup
 
-## Run
-
+Clone repository:
 ```bash
-python app.py
-```
-
-Open [http://localhost:5000](http://localhost:5000) in your browser.
-
-## Tech stack
-
-- **Backend:** Flask, requests, Beautiful Soup, python-dotenv
-- **Frontend:** Vanilla HTML, CSS, JavaScript
-- **AI:** [Featherless API](https://featherless.ai/docs)
-
-## License
-
-MIT
+git clone https://github.com/your-username/nosylot.git
+cd nosylot
