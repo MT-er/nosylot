@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nosylot</title>
+  <link rel="icon" href="/nozylot.ico" type="image/x-icon">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    :root {
+      --bg: #0c0c0c;
+      --text: #e4e4e4;
+      --text-bright: #fafafa;
+      --muted: #888;
+      --muted-hover: #bbb;
+      --border: #2a2a2a;
+      --border-hover: #333;
+      --input-bg: #141414;
+      --input-border: #252525;
+      --input-focus: #404040;
+      --btn-bg: #262626;
+      --btn-hover: #333;
+      --tab-active-bg: #1a1a1a;
+      --result-valid-bg: #141a14;
+      --result-valid-border: #1e2e1e;
+      --result-valid-text: #9bc49b;
+      --result-invalid-bg: #1a1414;
+      --result-invalid-border: #2e1e1e;
+      --result-invalid-text: #c49b9b;
+      --result-pending-bg: #14141a;
+      --result-pending-border: #1e1e2e;
+      --result-pending-text: #9b9bc4;
+      --toggle-bg: #1a1a1a;
+      --toggle-border: #333;
+    }
+    html.theme-light {
+      --bg: #f5f5f5;
+      --text: #1a1a1a;
+      --text-bright: #0a0a0a;
+      --muted: #666;
+      --muted-hover: #333;
+      --border: #e0e0e0;
+      --border-hover: #ccc;
+      --input-bg: #fff;
+      --input-border: #e5e5e5;
+      --input-focus: #999;
+      --btn-bg: #e8e8e8;
+      --btn-hover: #ddd;
+      --tab-active-bg: #fff;
+      --result-valid-bg: #e8f0e8;
+      --result-valid-border: #c8d8c8;
+      --result-valid-text: #2d5a2d;
+      --result-invalid-bg: #f0e8e8;
+      --result-invalid-border: #d8c8c8;
+      --result-invalid-text: #5a2d2d;
+      --result-pending-bg: #e8e8f0;
+      --result-pending-border: #c8c8d8;
+      --result-pending-text: #2d2d5a;
+      --toggle-bg: #fff;
+      --toggle-border: #e0e0e0;
+    }
+    html { transition: background-color 0.35s ease, color 0.35s ease; }
+    body {
+      font-family: "DM Sans", system-ui, sans-serif;
+      min-height: 100vh;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg);
+      color: var(--text);
+      transition: background-color 0.35s ease, color 0.35s ease;
+    }
+    .theme-toggle {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      width: 2.5rem;
+      height: 2.5rem;
+      padding: 0;
+      border: 1px solid var(--toggle-border);
+      border-radius: 50%;
+      background: var(--toggle-bg);
+      color: var(--muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 0.25s ease, border-color 0.25s ease, background 0.25s ease, transform 0.2s ease;
+    }
+    .theme-toggle:hover { color: var(--text); transform: scale(1.05); }
+    .theme-toggle svg { width: 1.2rem; height: 1.2rem; }
+    .theme-toggle .icon-sun { display: none; }
+    .theme-toggle .icon-moon { display: block; }
+    html.theme-light .theme-toggle .icon-sun { display: block; }
+    html.theme-light .theme-toggle .icon-moon { display: none; }
+    main {
+      width: 100%;
+      max-width: 440px;
+      padding: 2rem 1.5rem;
+    }
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin: 0 0 2rem;
+      letter-spacing: -0.03em;
+      color: var(--text-bright);
+      transition: color 0.35s ease;
+    }
+    .tabs { display: flex; gap: 0.25rem; margin-bottom: 1rem; }
+    .tabs button {
+      flex: 1;
+      padding: 0.6rem 1rem;
+      font-family: inherit;
+      font-size: 0.875rem;
+      font-weight: 500;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      transition: color 0.15s, border-color 0.15s, background 0.15s;
+    }
+    .tabs button:hover { color: var(--muted-hover); border-color: var(--border-hover); }
+    .tabs button.active {
+      background: var(--tab-active-bg);
+      border-color: var(--border-hover);
+      color: var(--text);
+    }
+    .panel {
+      display: none;
+    }
+    .panel.visible {
+      display: block;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    input[type="text"],
+    textarea {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      font-family: inherit;
+      font-size: 0.9375rem;
+      border: 1px solid var(--input-border);
+      border-radius: 8px;
+      background: var(--input-bg);
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.15s, background 0.35s ease, color 0.35s ease;
+    }
+    input:focus,
+    textarea:focus {
+      border-color: var(--input-focus);
+    }
+    input::placeholder,
+    textarea::placeholder {
+      color: var(--muted);
+    }
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+    button[type="submit"] {
+      padding: 0.75rem 1.25rem;
+      font-family: inherit;
+      font-size: 0.9375rem;
+      font-weight: 500;
+      border: none;
+      border-radius: 8px;
+      background: var(--btn-bg);
+      color: var(--text);
+      cursor: pointer;
+      transition: background 0.15s, background-color 0.35s ease, color 0.35s ease;
+    }
+    button[type="submit"]:hover {
+      background: var(--btn-hover);
+    }
+    button[type="submit"]:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    #analyzeResult {
+      margin-top: 1.5rem;
+      padding: 1rem 1.25rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      min-height: 2.5rem;
+      white-space: pre-wrap;
+      transition: background 0.35s ease, border-color 0.35s ease, color 0.35s ease;
+    }
+    #analyzeResult.valid {
+      background: var(--result-valid-bg);
+      border: 1px solid var(--result-valid-border);
+      color: var(--result-valid-text);
+    }
+    #analyzeResult.invalid {
+      background: var(--result-invalid-bg);
+      border: 1px solid var(--result-invalid-border);
+      color: var(--result-invalid-text);
+    }
+    #analyzeResult.pending {
+      background: var(--result-pending-bg);
+      border: 1px solid var(--result-pending-border);
+      color: var(--result-pending-text);
+    }
+  </style>
+</head>
+<body>
+  <button type="button" class="theme-toggle" aria-label="Toggle light/dark mode">
+    <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+    <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+  </button>
+  <main>
+    <h1>Nosylot</h1>
+
+    <div class="tabs" role="tablist">
+      <button type="button" class="active" role="tab" aria-selected="true" data-mode="url">URL</button>
+      <button type="button" role="tab" aria-selected="false" data-mode="text">Paste text</button>
+    </div>
+
+    <form id="analyzeForm">
+      <div id="panelUrl" class="panel visible">
+        <input type="text" id="analyzeUrl" placeholder="https://example.com" autocomplete="url" />
+      </div>
+      <div id="panelText" class="panel">
+        <textarea id="analyzeText" placeholder="Paste the content you want to ask about…"></textarea>
+      </div>
+      <input type="text" id="analyzeQuestion" placeholder="Your question" required />
+      <button type="submit" id="analyzeSubmit">Analyze</button>
+    </form>
+    <div id="analyzeResult" aria-live="polite"></div>
+  </main>
+  <script>
+    (function initTheme() {
+      const stored = localStorage.getItem('nosylot-theme');
+      const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+      if (stored === 'light' || (!stored && prefersLight)) document.documentElement.classList.add('theme-light');
+    })();
+    document.querySelector('.theme-toggle').addEventListener('click', () => {
+      document.documentElement.classList.toggle('theme-light');
+      localStorage.setItem('nosylot-theme', document.documentElement.classList.contains('theme-light') ? 'light' : 'dark');
+    });
+
+    const tabs = document.querySelectorAll('.tabs button');
+    const panelUrl = document.getElementById('panelUrl');
+    const panelText = document.getElementById('panelText');
+    const analyzeUrl = document.getElementById('analyzeUrl');
+    const analyzeText = document.getElementById('analyzeText');
+    const analyzeForm = document.getElementById('analyzeForm');
+    const analyzeQuestion = document.getElementById('analyzeQuestion');
+    const analyzeResult = document.getElementById('analyzeResult');
+    const analyzeSubmit = document.getElementById('analyzeSubmit');
+
+    tabs.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const mode = btn.dataset.mode;
+        tabs.forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected', 'false'); });
+        btn.classList.add('active');
+        btn.setAttribute('aria-selected', 'true');
+        panelUrl.classList.toggle('visible', mode === 'url');
+        panelText.classList.toggle('visible', mode === 'text');
+        analyzeUrl.disabled = mode !== 'url';
+        analyzeText.disabled = mode !== 'text';
+      });
+    });
+    analyzeText.disabled = true;
+
+    function showAnalyzeResult(message, status) {
+      analyzeResult.textContent = message;
+      analyzeResult.className = status;
+    }
+
+    analyzeForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const question = analyzeQuestion.value.trim();
+      const isUrlMode = document.querySelector('.tabs button.active').dataset.mode === 'url';
+      const url = analyzeUrl.value.trim();
+      const text = analyzeText.value.trim();
+
+      if (!question) {
+        showAnalyzeResult('Enter a question.', 'invalid');
+        return;
+      }
+      if (isUrlMode) {
+        if (!url) {
+          showAnalyzeResult('Enter a URL.', 'invalid');
+          return;
+        }
+      } else {
+        if (!text) {
+          showAnalyzeResult('Paste some text.', 'invalid');
+          return;
+        }
+      }
+
+      showAnalyzeResult('Nosylot is reading the page...', 'pending');
+      analyzeSubmit.disabled = true;
+      try {
+        const body = { question };
+        if (isUrlMode) body.url = url;
+        else body.text = text;
+        const res = await fetch('/api/analyze', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          showAnalyzeResult(data.error || `Error ${res.status}`, 'invalid');
+          return;
+        }
+        showAnalyzeResult(data.answer || '(No answer)', 'valid');
+      } catch {
+        showAnalyzeResult('Request failed. Is the backend running?', 'invalid');
+      }
+      analyzeSubmit.disabled = false;
+    });
+  </script>
+</body>
+</html>
