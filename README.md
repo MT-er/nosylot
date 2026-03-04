@@ -1,4 +1,4 @@
-# 🦎 Nosylot
+#  Nosylot
 
 Nosylot is a lightweight AI reading companion that helps users quickly understand web content without manually reading long articles. Simply enter a URL or paste text, ask a question, and Nosylot will analyze the content using AI.
 
